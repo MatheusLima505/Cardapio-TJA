@@ -16,8 +16,8 @@
   --primary-color: #4CAF50;
   --secondary-color: #333333;
   --accent-color: #f9a825;
-  --background-light: #ffffff;
-  --background-dark: #333333;
+  --background-light: #061939; /*Anterior: #ffffff*/
+  --background-dark: #061939; /*anterior: #333333*/
   --text-light: #f4f4f4;
   --text-dark: #212121;
   --border-radius: 10px;
@@ -70,6 +70,26 @@ h2 {
   color: var(--secondary-color);
   text-align: center;
   margin: 10px 0;
+}
+
+h3 {
+  color:white;
+}
+
+h4 {
+  color: white;
+}
+
+p {
+  color: white;
+}
+
+span {
+  color: white;
+}
+
+label {
+  color: white;
 }
 
 /* Estilo dos itens do cardápio */
@@ -157,6 +177,7 @@ button:disabled {
     margin: 5px 0;
   }
 }
+
 #dados {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -233,4 +254,19 @@ button:disabled {
   font-size: 18px;
   font-weight: bold;
   z-index: 1000;
+}
+
+#preco-total {
+  color: black;
+}
+
+input {
+  border-radius: 8px;
+}
+
+#mensagem {
+  position: relative;
+  border: solid black 1px;
+  margin: 10px;
+  padding: 10px;
 }

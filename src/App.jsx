@@ -22,9 +22,53 @@ function App() {
     }
   }
 
+  const confirmarPedido = () => {
+    const nome = document.getElementById('cliente').value
+    const turma = document.getElementById('turma').value
+    const contato = document.getElementById('contato').value
+
+    const container = document.getElementById('revisao')
+
+    if (nome === null || nome === '' || turma === null || turma === '' || contato === null || contato === '') {
+      container.innerHTML = "<h1>Preencha todas as informações!</h1>"
+    } else {
+      const dadosCliente = `
+      <p><strong>Nome:</strong> ${nome}</p>
+      <p><strong>Turma:</strong> ${turma}</p>
+      <p><strong>Contato:</strong> ${contato}</p>
+      <br/>
+      <h3>Resumo do pedido:</h3>
+      `
+      let precoTotal = 0;
+      const itensPedidos = cardapio
+        .filter(item => item.quantidade > 0)
+        .map(item => {
+          precoTotal += item.preco * item.quantidade
+          return `<p>${item.item} - ${item.quantidade} unidade(s)</p>`
+        })
+        .join('')
+
+      if (precoTotal > 0) {
+        container.innerHTML = dadosCliente + itensPedidos
+          + `<br/><h4>Valor total: ${formatarMoeda(precoTotal)}</h4>`
+
+        setTimeout(() => {
+          const botao = document.createElement('button')
+          botao.className = 'submit-button'
+          botao.textContent = 'Confirmar pedido'
+          botao.onclick = enviarPedido
+          container.appendChild(botao)
+        }, 0)
+      } else {
+        container.innerHTML = `<h1>Selecione pelo menos um produto!</h1>`
+      }
+    }
+    document.getElementById('confirmar-pedido').style.display = 'block'
+  }
+
   const enviarPedido = async () => {
     console.log("funcao buceta foi chamada")
-    
+
     try {
       const cliente = document.getElementById('cliente').value
       const turma = document.getElementById('turma').value
@@ -114,60 +158,16 @@ function App() {
     }
   }
 
-  const confirmarPedido = () => {
-    const nome = document.getElementById('cliente').value
-    const turma = document.getElementById('turma').value
-    const contato = document.getElementById('contato').value
-
-    const container = document.getElementById('revisao')
-
-    if (nome === null || nome === '' || turma === null || turma === '' || contato === null || contato === '') {
-      container.innerHTML = "<h1>Preencha todas as informações!</h1>"
-    } else {
-      const dadosCliente = `
-      <p><strong>Nome:</strong> ${nome}</p>
-      <p><strong>Turma:</strong> ${turma}</p>
-      <p><strong>Contato:</strong> ${contato}</p>
-      <br/>
-      <h3>Resumo do pedido:</h3>
-      `
-      let precoTotal = 0;
-      const itensPedidos = cardapio
-        .filter(item => item.quantidade > 0)
-        .map(item => {
-          precoTotal += item.preco * item.quantidade
-          return `<p>${item.item} - ${item.quantidade} unidade(s)</p>`
-        })
-        .join('')
-
-      if (precoTotal > 0) {
-        container.innerHTML = dadosCliente + itensPedidos
-          + `<br/><h4>Valor total: ${formatarMoeda(precoTotal)}</h4>`
-        
-        setTimeout(() => {
-          const botao = document.createElement('button')
-          botao.className = 'submit-button'
-          botao.textContent = 'Confirmar pedido'
-          botao.onclick = enviarPedido
-          container.appendChild(botao)
-        }, 0)
-      } else {
-        container.innerHTML = `<h1>Selecione pelo menos um produto!</h1>`
-      }
-    }
-    document.getElementById('confirmar-pedido').style.display = 'block'
-  }
-
   return (
     <>
       <h1>Cardápio da TJA</h1>
       <div id='form'>
-        <div id='cardapio' style={{ border: 'solid red 1px' }}>
+        <div id='cardapio' style={{ border: 'solid red 1px', justifyItems: 'center' }}>
           {cardapio.length > 0 ? (
             cardapio.map((item, index) => (
               <div key={index} style={{ display: 'flex', alignItems: 'center', width: '500px', margin: '15px', padding: '5px', border: 'solid black 1px' }}>
                 <img
-                  src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlOVPOFvPb5zuHi8lEc_D0-il0GYmnlYN8Dg&s'
+                  src={item.imagem}
                   style={{ width: '100px', height: '100px', marginRight: '16px' }}
                 />
                 <div>
@@ -175,11 +175,20 @@ function App() {
                   <p>{item.estoque > 0 ? (item.estoque + ' Restantes') : 'Esgotado'}</p>
                 </div>
 
-                <div style={{ marginLeft: 'auto' }}>
-                  Encomendar <br />
-                  <button type="button" onClick={() => handleDecrement(index)}>-</button>
-                  <span>{item.quantidade || 0}</span>
-                  <button type="button" onClick={() => handleIncrement(index)}>+</button>
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 'auto',
+                  width: 'fit-content'
+                }}>
+                  <span style={{ marginBottom: '5px' }}>Encomendar</span>
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    <button type="button" onClick={() => handleDecrement(index)}>-</button>
+                    <span>{item.quantidade || 0}</span>
+                    <button type="button" onClick={() => handleIncrement(index)}>+</button>
+                  </div>
                 </div>
               </div>
             ))
@@ -192,13 +201,13 @@ function App() {
 
         <div id='dados' style={{ border: 'solid green 1px', padding: '10px', marginTop: '20px', marginBottom: '10px' }}>
           <label htmlFor="cliente">Nome: </label>
-          <input type="text" name="cliente" id="cliente" placeholder="Seu nome" />
+          <input type="text" name="cliente" id="cliente" placeholder="Seu nome" required />
 
           <label htmlFor="turma">Turma: </label>
           <input type="text" name="turma" id="turma" placeholder='Sua turma' />
 
           <label htmlFor="contato">Contato: </label>
-          <input type="tel" name="contato" id="contato" placeholder='Seu contato' />
+          <input type="tel" name="contato" id="contato" placeholder='(99) 99999-9999' pattern='\(\d{2}\) \d{9}' required />
         </div>
 
         <label htmlFor="observacao">Observações adicionais: </label> <br />
@@ -209,7 +218,12 @@ function App() {
         </div>
 
         <br />
-        <h4>Atenção! <br /> Os pagamentos devem ser realizados na retirada dos pedidos!</h4> <br />
+        <div id='mensagem'>
+          <h4> <strong>Atenção!</strong> <br />
+            A turma <strong>NÃO</strong> fará entregas. Os pedidos devem ser retirados na sala 05 do bloco 1 no primeiro intervalo (a partir das 14h30). <br />
+            Pagamentos devem ser realizados na retirada dos pedidos.<br />
+          </h4>
+        </div>
         <button type='button' className='submit-button' onClick={confirmarPedido}>Fazer pedido</button>
       </div>
     </>
