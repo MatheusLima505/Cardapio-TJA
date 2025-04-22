@@ -23,6 +23,8 @@ function App() {
   }
 
   const enviarPedido = async () => {
+    console.log("funcao buceta foi chamada")
+    
     try {
       const cliente = document.getElementById('cliente').value
       const turma = document.getElementById('turma').value
@@ -45,6 +47,8 @@ function App() {
         observacao: observacao,
         total: total
       }
+
+      console.log("pedido a ser enviado: ", pedido)
 
       const { data, error } = await supabase
         .from('Pedidos')
@@ -139,21 +143,25 @@ function App() {
       if (precoTotal > 0) {
         container.innerHTML = dadosCliente + itensPedidos
           + `<br/><h4>Valor total: ${formatarMoeda(precoTotal)}</h4>`
-          + `<br/> <button type='submit' class='submit-button'>Confirmar pedido</button>`
-
-          document.querySelector('.submit-button')?.addEventListener('click', enviarPedido)
+        
+        setTimeout(() => {
+          const botao = document.createElement('button')
+          botao.className = 'submit-button'
+          botao.textContent = 'Confirmar pedido'
+          botao.onclick = enviarPedido
+          container.appendChild(botao)
+        }, 0)
       } else {
         container.innerHTML = `<h1>Selecione pelo menos um produto!</h1>`
       }
     }
-
     document.getElementById('confirmar-pedido').style.display = 'block'
   }
 
   return (
     <>
       <h1>Cardápio da TJA</h1>
-      <form>
+      <div id='form'>
         <div id='cardapio' style={{ border: 'solid red 1px' }}>
           {cardapio.length > 0 ? (
             cardapio.map((item, index) => (
@@ -203,7 +211,7 @@ function App() {
         <br />
         <h4>Atenção! <br /> Os pagamentos devem ser realizados na retirada dos pedidos!</h4> <br />
         <button type='button' className='submit-button' onClick={confirmarPedido}>Fazer pedido</button>
-      </form>
+      </div>
     </>
   )
 }
