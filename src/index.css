@@ -157,3 +157,80 @@ button:disabled {
     margin: 5px 0;
   }
 }
+#dados {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px 16px;
+  max-width: 400px;
+  margin: 0 auto;
+  align-items: center;
+  padding-top: 20px;
+}
+
+#dados label {
+  text-align: right;
+  padding-right: 8px;
+}
+
+#dados input {
+  width: 100%;
+  padding: 6px;
+  box-sizing: border-box;
+}
+
+#submit-button {
+  display: block;
+  margin: 24px auto 0;
+  padding: 10px 20px;
+  font-size: 1rem;
+}
+
+#confirmar-pedido {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+}
+
+#revisao {
+  position: relative;
+  background-color: #061939;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 55%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  animation-name: aparecer;
+  animation-duration: 1s;
+  color: white;
+}
+
+@keyframes aparecer {
+  from {
+      top: -300px;
+      opacity: 0;
+  } to {
+      top: 0;
+      opacity: 1;
+  }
+}
+
+#preco-total {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #f0f0f0;
+  padding: 12px 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 1000;
+}
