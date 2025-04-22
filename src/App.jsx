@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import { createClient } from '@supabase/supabase-js'
+import axios from 'axios'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY
@@ -22,12 +23,15 @@ function App() {
     }
   }
 
+  
+  //confirmação do pedido
   const confirmarPedido = () => {
     const nome = document.getElementById('cliente').value
     const turma = document.getElementById('turma').value
     const contato = document.getElementById('contato').value
 
     const container = document.getElementById('revisao')
+    document.getElementById('confirmar-pedido').style.display = 'block'
 
     if (nome === null || nome === '' || turma === null || turma === '' || contato === null || contato === '') {
       container.innerHTML = "<h1>Preencha todas as informações!</h1>"
@@ -66,48 +70,78 @@ function App() {
     document.getElementById('confirmar-pedido').style.display = 'block'
   }
 
+  // enviar pedido ao supabase
   const enviarPedido = async () => {
-    console.log("funcao buceta foi chamada")
-
+    const tempoMinimo = 5 * 60 * 1000; // 5 minutos
+    const contato = document.getElementById('contato').value;
+  
     try {
-      const cliente = document.getElementById('cliente').value
-      const turma = document.getElementById('turma').value
-      const contato = document.getElementById('contato').value
-      const observacao = document.getElementById('observacao').value
+      const ipResponse = await axios.get('https://api.ipify.org?format=json');
+      const ip = ipResponse.data.ip;
+  
+      // Verificar último pedido por IP
+      const { data: historico, error: errorHistorico } = await supabase
+        .from('Pedidos')
+        .select('created_at, ip_address')
+  
+      if (errorHistorico) {
+        console.error('Erro ao buscar histórico:', errorHistorico);
+        return;
+      }
+      console.log('IP capturado:', ip);
+      console.log('Resposta do Supabase:', historico);
 
+      console.log('Histórico encontrado:', historico);
+  
+      if (Array.isArray(historico) && historico.length > 0) {
+        const ultimoPedido = new Date(historico[0].created_at);
+        const tempoDecorrido = Date.now() - ultimoPedido.getTime();
+  
+        if (tempoDecorrido < tempoMinimo) {
+          alert("Você já fez um pedido recentemente. Tente novamente em alguns minutos.");
+          return;
+        }
+      }
+  
+      // Dados do pedido
+      const cliente = document.getElementById('cliente').value;
+      const turma = document.getElementById('turma').value;
+      const observacao = document.getElementById('observacao').value;
+  
       const itensSelecionados = cardapio
         .filter(item => item.quantidade > 0)
         .map(item => ({
           nome: item.item,
           quantidade: item.quantidade,
           preco: item.preco
-        }))
-
+        }));
+  
       const pedido = {
-        cliente: cliente,
-        turma: turma,
-        contato: contato,
+        cliente,
+        turma,
+        contato,
         item: itensSelecionados,
-        observacao: observacao,
-        total: total
-      }
-
-      console.log("pedido a ser enviado: ", pedido)
-
+        observacao,
+        ip_address: ip,
+        total
+      };
+  
       const { data, error } = await supabase
         .from('Pedidos')
-        .insert([pedido])
-
+        .insert([pedido]);
+  
       if (error) {
-        console.error('Erro ao enviar o pedido: ', error)
+        console.error('Erro ao enviar o pedido:', error);
       } else {
-        console.log('Pedido enviado com sucesso: ', data)
+        console.log('Pedido enviado com sucesso:', data);
+        document.getElementById('revisao').innerHTML = "";
+        document.getElementById('confirmar-pedido').style.display = "none";
       }
     } catch (err) {
-      console.error('Erro ao enviar o pedido: ', err)
+      console.error('Erro geral ao enviar o pedido:', err);
     }
-  }
-
+  };
+  
   useEffect(() => {
     async function fetchData() {
       try {
@@ -131,7 +165,7 @@ function App() {
 
     fetchData()
   }, [])
-
+  //calcular valor total
   const calcularTotal = (cardapio) => {
     const novoTotal = cardapio.reduce((acc, item) => {
       return acc + ((item.quantidade || 0) * item.preco)
@@ -139,7 +173,7 @@ function App() {
 
     setTotal(novoTotal)
   }
-
+  //aumentar e diminuir quantidade
   const handleIncrement = (index) => {
     const newCardapio = [...cardapio]
     if ((newCardapio[index].quantidade || 0) < cardapio[index].estoque) {
@@ -148,7 +182,6 @@ function App() {
       calcularTotal(newCardapio)
     }
   }
-
   const handleDecrement = (index) => {
     const newCardapio = [...cardapio]
     if (newCardapio[index].quantidade > 0) {
@@ -157,7 +190,7 @@ function App() {
       calcularTotal(newCardapio)
     }
   }
-
+  //pagina
   return (
     <>
       <h1>Cardápio da TJA</h1>
