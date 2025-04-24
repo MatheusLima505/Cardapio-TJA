@@ -83,6 +83,8 @@ function App() {
       const { data: historico, error: errorHistorico } = await supabase
         .from('Pedidos')
         .select('created_at, ip_address')
+        .order('created_at', {ascending: false})
+        .limit(1)
   
       if (errorHistorico) {
         console.error('Erro ao buscar histórico:', errorHistorico);
@@ -98,7 +100,7 @@ function App() {
         const tempoDecorrido = Date.now() - ultimoPedido.getTime();
   
         if (tempoDecorrido < tempoMinimo) {
-          alert("Você já fez um pedido recentemente. Tente novamente em alguns minutos.");
+          alert("Você já fez um pedido recentemente. Tente novamente em 5 minutos.");
           return;
         }
       }
