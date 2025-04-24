@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "HOST=0.0.0.0 react-scripts start"
+
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.4",
