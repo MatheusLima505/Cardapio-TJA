@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "postinstall": "chmod +x node_modules/.bin/*",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
