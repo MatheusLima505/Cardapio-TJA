@@ -1,209 +1,177 @@
-/* Reset básico e configuração de fontes */
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 :root {
-  font-family: 'Roboto', sans-serif;
-  line-height: 1.6;
-  font-weight: 400;
+  --color-primary: #0A192F;
+  --color-secondary: #64FFDA;
+  --color-background: #0A192F;
+  --color-surface: #112240;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #A8B2D1;
+  --color-accent: #00BFFF;
+  --color-error: #FF6B6B;
 
-  color-scheme: light dark;
-  --primary-color: #4CAF50;
-  --secondary-color: #333333;
-  --accent-color: #f9a825;
-  --background-light: #061939; /*Anterior: #ffffff*/
-  --background-dark: #061939; /*anterior: #333333*/
-  --text-light: #f4f4f4;
-  --text-dark: #212121;
   --border-radius: 10px;
-
-  color: var(--text-light);
-  background-color: var(--background-dark);
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Cores e temas dinâmicos */
-@media (prefers-color-scheme: light) {
-  :root {
-    --background-dark: #ffffff;
-    --background-light: #fafafa;
-    --text-dark: #212121;
-    --text-light: #333333;
-    --primary-color: #388e3c;
-    --secondary-color: #555;
-    --accent-color: #f9a825;
-  }
+.montserrat {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 260;
+  font-style: normal;
 }
 
-/* Estilos gerais do body */
+.playfair-display-font {
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* === Reset e Base === */
 body {
   margin: 0;
-  padding: 20px;
+  padding: 0.5rem;
+  font-family: 'Playfair Display', sans-serif;
+  background: linear-gradient(135deg, #0A192F, #071733, #03111e);
+  color: var(--color-text-primary);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
-  font-family: 'Roboto', sans-serif;
-  background-color: var(--background-light);
-  color: var(--text-dark);
+  gap: 2rem;
 }
+
+/* === Títulos === */
 
 h1 {
-  font-size: 2.5rem;
-  color: var(--primary-color);
-  margin-bottom: 20px;
-}
-
-h2 {
-  font-size: 1.8rem;
-  font-weight: 500;
-  color: var(--secondary-color);
   text-align: center;
-  margin: 10px 0;
-}
-
-h3 {
-  color:white;
+  font-size: 3.5rem;
+  margin-bottom: 2rem;
+  color: var(--color-secondary);
+  margin-top: 0;
 }
 
 h4 {
-  color: white;
+  font-family: 'Montserrat', sans-serif;
 }
 
-p {
-  color: white;
+/* === Containers === */
+#cardapio {
+  background-color: var(--color-surface);
+  padding: 1rem;
+  border-radius: 16px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
+  transition: box-shadow 0.3s ease;
+  max-width: 600px;
+  margin: 0 auto;
+  justify-items: center;
 }
 
-span {
-  color: white;
+#cardapio:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
 }
 
-label {
-  color: white;
-}
-
-/* Estilo dos itens do cardápio */
 .cardapio-item {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  background-color: var(--background-light);
-  padding: 20px;
+  background-color: var(--color-background);
+  padding: 10px 15px;
   margin: 15px;
   border-radius: var(--border-radius);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 1);
+  width: 500px;
   text-align: center;
+  transition: border-color 0.3s ease, box-shadow 0.2s ease, transform 0.3s;
+  overflow: hidden;
+}
+
+.cardapio-item:hover {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 8px var(--color-secondary);
+  outline: none;
+  transform: translateY(-4px);
 }
 
 .cardapio-item img {
+  border: solid var(--color-primary) 3px;
   border-radius: var(--border-radius);
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: auto;
   object-fit: cover;
-  margin-bottom: 10px;
 }
 
 .cardapio-item h3 {
-  font-size: 1.5rem;
-  color: var(--primary-color);
+  color: var(--color-text-primary);
 }
 
 .cardapio-item p {
-  color: var(--secondary-color);
-  font-size: 1rem;
+  color: var(--color-text-secondary);
 }
 
-.button-group {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 15px;
+#preco-total {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--color-text-primary);
+  padding: 12px 20px;
+  border-radius: 10px;
+  /* box-shadow: 0 0 12px rgba(100, 255, 218, 0.6); */
+  box-shadow: 0 0 12px rgba(0, 0, 0, 1);
+  border: solid var(--color-primary) 2px;
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 1000;
+	color: var(--color-surface);
+  transition: box-shadow 0.2s ease, transform 0.3s;
 }
 
-button {
-  background-color: var(--primary-color);
-  color: var(--text-light);
-  border: none;
-  border-radius: var(--border-radius);
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: 0 10px;
+#preco-total:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 6px rgba(100, 255, 218, 2);
 }
 
-button:hover {
-  background-color: var(--accent-color);
-}
+/* === Formulários === */
 
-button:disabled {
-  background-color: #ddd;
-  cursor: not-allowed;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-  body {
-    padding: 10px;
-  }
-
-  .cardapio-item {
-    width: 100%;
-  }
-
-  h1 {
-    font-size: 2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .button-group {
-    flex-direction: column;
-  }
-
-  button {
-    width: 100%;
-    margin: 5px 0;
-  }
-}
-
-#dados {
+.dados {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 12px 16px;
-  max-width: 400px;
+  max-width: 500px;
   margin: 0 auto;
   align-items: center;
   padding-top: 20px;
+  padding: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
-#dados label {
-  text-align: right;
-  padding-right: 8px;
+.form {
+  margin-bottom: 1.5rem;
 }
 
-#dados input {
-  width: 100%;
-  padding: 6px;
-  box-sizing: border-box;
-}
-
-#submit-button {
+label {
+  color: var(--color-text-secondary);
   display: block;
-  margin: 24px auto 0;
-  padding: 10px 20px;
-  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+input, textarea, select {
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  border: 2px solid var(--color-surface);
+  border-radius: 8px;
+  padding: 0.75rem;
+  width: 100%;
+  transition: border-color 0.3s ease, box-shadow 0.2s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 8px var(--color-secondary);
+  outline: none;
+}
+
+#label-observacao {
+  margin-bottom: 0px;
 }
 
 #confirmar-pedido {
@@ -222,15 +190,25 @@ button:disabled {
 
 #revisao {
   position: relative;
-  background-color: #061939;
+  background-color: var(--color-background);
   margin: auto;
   padding: 20px;
-  border: 1px solid #888;
+  border: 1px solid var(--color-surface);
   width: 55%;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  box-shadow: 0 0 24px rgba(0,0,0,1);
   animation-name: aparecer;
   animation-duration: 1s;
-  color: white;
+  color: var(--color-text-primary);
+}
+
+#valor-final {
+  padding: 15px;
+  width: 200px;
+  margin: auto;
+  margin-bottom: 20px;
+  border-radius: var(--border-radius);
+  background-color: var(--color-surface);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.8);
 }
 
 @keyframes aparecer {
@@ -243,30 +221,31 @@ button:disabled {
   }
 }
 
-#preco-total {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #f0f0f0;
-  padding: 12px 20px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  font-size: 18px;
+/* === Botões === */
+button {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 12px;
   font-weight: bold;
-  z-index: 1000;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin: 0 10px;
 }
 
-#preco-total {
-  color: black;
+button:hover {
+  background-color: var(--color-accent);
+  transform: scale(1.05);
 }
 
-input {
-  border-radius: 8px;
-}
-
-#mensagem {
-  position: relative;
-  border: solid black 1px;
-  margin: 10px;
-  padding: 10px;
+/* === Alertas === */
+.alert {
+  background-color: var(--color-error);
+  color: var(--color-text-primary);
+  padding: 1rem;
+  border-radius: 10px;
+  margin: 1rem 0;
+  font-weight: bold;
 }

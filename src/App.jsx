@@ -28,6 +28,7 @@ function App() {
     const nome = document.getElementById("cliente").value;
     const turma = document.getElementById("turma").value;
     const contato = document.getElementById("contato").value;
+    const observacao = document.getElementById("observacao").value;
 
     const container = document.getElementById("revisao");
     document.getElementById("confirmar-pedido").style.display = "block";
@@ -46,9 +47,9 @@ function App() {
       <p><strong>Nome:</strong> ${nome}</p>
       <p><strong>Turma:</strong> ${turma}</p>
       <p><strong>Contato:</strong> ${contato}</p>
-      <br/>
-      <h3>Resumo do pedido:</h3>
+      ${ (observacao !== "" && observacao !== null) ? `<p><strong>Observação</strong><br/> ${observacao} <br/></p>` : ""}
       `;
+
       let precoTotal = 0;
       const itensPedidos = cardapio
         .filter((item) => item.quantidade > 0)
@@ -61,8 +62,10 @@ function App() {
       if (precoTotal > 0) {
         container.innerHTML =
           dadosCliente +
+          `<div id="resumo-pedidos"> <h3>Resumo do pedido:</h3>` +
           itensPedidos +
-          `<br/><h4>Valor total: ${formatarMoeda(precoTotal)}</h4>`;
+          `</div>` +
+          `<br/><h4 id="valor-final">Valor total: ${formatarMoeda(precoTotal)}</h4>`;
 
         setTimeout(() => {
           const botao = document.createElement("button");
@@ -81,7 +84,6 @@ function App() {
   // enviar pedido ao supabase
   const enviarPedido = async () => {
     const tempoMinimo = 5 * 60 * 1000; // 5 minutos
-    const contato = document.getElementById("contato").value;
 
     try {
       const ipResponse = await axios.get("https://api.ipify.org?format=json");
@@ -114,6 +116,7 @@ function App() {
       // Dados do pedido
       const cliente = document.getElementById("cliente").value;
       const turma = document.getElementById("turma").value;
+      const contato = document.getElementById("contato").value;
       const observacao = document.getElementById("observacao").value;
 
       const itensSelecionados = cardapio
@@ -197,24 +200,11 @@ function App() {
   return (
     <>
       <h1>Cardápio da TJA</h1>
-      <div id="form">
-        <div
-          id="cardapio"
-          style={{ border: "solid red 1px", justifyItems: "center" }}
-        >
+      <div className="form">
+        <div id="cardapio">
           {cardapio.length > 0 ? (
             cardapio.map((item, index) => (
-              <div
-                key={index}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  width: "500px",
-                  margin: "15px",
-                  padding: "5px",
-                  border: "solid black 1px",
-                }}
-              >
+              <div key={index} className="cardapio-item">
                 <img
                   src={item.imagem}
                   style={{
@@ -223,7 +213,7 @@ function App() {
                     marginRight: "16px",
                   }}
                 />
-                <div>
+                <div style={{ width: '200px'}}>
                   <h3 style={{ marginLeft: "auto", marginRight: "auto" }}>
                     {item.item + ` (R$ ${item.preco.toFixed(2)})`}
                   </h3>
@@ -244,7 +234,7 @@ function App() {
                     width: "fit-content",
                   }}
                 >
-                  <span style={{ marginBottom: "5px" }}>Encomendar</span>
+                  <span style={{ marginBottom: "8px" }}>Encomendar</span>
                   <div
                     style={{
                       display: "flex",
@@ -274,15 +264,7 @@ function App() {
           )}
         </div>
         <h3 id="preco-total">Total: {formatarMoeda(total)}</h3>
-        <div
-          id="dados"
-          style={{
-            border: "solid green 1px",
-            padding: "10px",
-            marginTop: "20px",
-            marginBottom: "10px",
-          }}
-        >
+        <div className="dados">
           <label htmlFor="cliente">Nome: </label>
           <input
             type="text"
@@ -290,10 +272,17 @@ function App() {
             id="cliente"
             placeholder="Seu nome"
             required
+            autoComplete="off"
           />
 
           <label htmlFor="turma">Turma: </label>
-          <input type="text" name="turma" id="turma" placeholder="Sua turma" />
+          <input
+            type="text"
+            name="turma"
+            id="turma"
+            placeholder="Sua turma"
+            autoComplete="off"
+          />
 
           <label htmlFor="contato">Contato: </label>
           <input
@@ -303,9 +292,10 @@ function App() {
             placeholder="(99) 99999-9999"
             pattern="\(\d{2}\) \d{9}"
             required
+            autoComplete="off"
           />
         </div>
-        <label htmlFor="observacao">Observações adicionais: </label> <br />
+        <label htmlFor="observacao" id="label-observacao">Observações adicionais: </label> <br />
         <textarea
           name="observacao"
           id="observacao"
