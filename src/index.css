@@ -249,3 +249,18 @@ button:hover {
   margin: 1rem 0;
   font-weight: bold;
 }
+
+/* Responsividade */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .cardapio-item {
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+}
