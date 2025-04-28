@@ -215,8 +215,14 @@ function App() {
                 />
                 <div style={{ width: '200px'}}>
                   <h3 style={{ marginLeft: "auto", marginRight: "auto" }}>
-                    {item.item + ` (R$ ${item.preco.toFixed(2)})`}
+                    {item.item}
                   </h3>
+                  <p style={{
+                    color: "white",
+                    fontSize: "1.05rem"
+                  }}>
+                  R$ {item.preco.toFixed(2)}
+                  </p>
                   <p>
                     {item.estoque > 0
                       ? item.estoque + " Restantes"
