@@ -41,7 +41,6 @@ body {
 }
 
 /* === Títulos === */
-
 h1 {
   text-align: center;
   font-size: 3.5rem;
@@ -64,6 +63,7 @@ h4 {
   max-width: 600px;
   margin: 0 auto;
   justify-items: center;
+  width: 100%;
 }
 
 #cardapio:hover {
@@ -75,13 +75,14 @@ h4 {
   align-items: center;
   background-color: var(--color-background);
   padding: 10px 15px;
-  margin: 1rem;
+  margin: 1rem auto;
   border-radius: var(--border-radius);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 1);
-  width: 500px;
+  max-width: 500px;
   text-align: center;
   transition: border-color 0.3s ease, box-shadow 0.2s ease, transform 0.3s;
   overflow: hidden;
+  width: 100%;
 }
 
 .cardapio-item:hover {
@@ -94,7 +95,7 @@ h4 {
 .cardapio-item img {
   border: solid var(--color-primary) 3px;
   border-radius: var(--border-radius);
-  width: 100%;
+  max-width: 100%;
   height: auto;
   object-fit: cover;
 }
@@ -114,13 +115,11 @@ h4 {
   background-color: var(--color-text-primary);
   padding: 12px 20px;
   border-radius: 10px;
-  /* box-shadow: 0 0 12px rgba(100, 255, 218, 0.6); */
   box-shadow: 0 0 12px rgba(0, 0, 0, 1);
   border: solid var(--color-primary) 2px;
-  font-size: 18px;
   font-weight: bold;
   z-index: 1000;
-	color: var(--color-surface);
+  color: var(--color-surface);
   transition: box-shadow 0.2s ease, transform 0.3s;
   font-size: 20px;
 }
@@ -131,7 +130,6 @@ h4 {
 }
 
 /* === Formulários === */
-
 .dados {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -139,7 +137,6 @@ h4 {
   max-width: 500px;
   margin: 0 auto;
   align-items: center;
-  padding-top: 20px;
   padding: 10px;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -185,7 +182,6 @@ input:focus, textarea:focus, select:focus {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0,0,0);
   background-color: rgba(0,0,0,0.4);
 }
 
@@ -200,34 +196,24 @@ input:focus, textarea:focus, select:focus {
   animation-name: aparecer;
   animation-duration: 1s;
   color: var(--color-text-primary);
+  max-width: 90%;
 }
 
 .resumo {
-  width: 500px;
+  max-width: 500px;
   margin: auto;
   margin-bottom: 20px;
   border-radius: var(--border-radius);
   background-color: var(--color-surface);
   box-shadow: 0 0 16px rgba(0, 0, 0, 2);
   padding: 5px;
-}
-
-#resumo-dados {
-  /* border: solid red 1px; */
-  
-}
-
-#resumo-pedidos {
-  /* border: solid green 1px; */
-}
-
-#resumo-observacao {
-  /* border: solid yellow 1px; */
+  width: 100%;
 }
 
 #valor-final {
   padding: 15px;
-  width: 200px;
+  width: 100%;
+  max-width: 200px;
   margin: auto;
   margin-bottom: 20px;
   border-radius: var(--border-radius);
@@ -237,11 +223,12 @@ input:focus, textarea:focus, select:focus {
 
 @keyframes aparecer {
   from {
-      top: -300px;
-      opacity: 0;
-  } to {
-      top: 0;
-      opacity: 1;
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
   }
 }
 
@@ -299,17 +286,43 @@ button:hover {
   font-weight: bold;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-  body {
-    padding: 10px;
+/* === Responsividade === */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 2rem;
   }
 
   .cardapio-item {
+    flex-direction: column;
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+
+  .resumo, #valor-final {
     width: 100%;
   }
 
-  h1 {
-    font-size: 2rem;
+  #revisao {
+    width: 90%;
+  }
+
+  .dados {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 1rem;
+  }
+
+  #preco-total {
+    right: 10px;
+    left: 10px;
+    width: auto;
+    font-size: 16px;
+    padding: 10px;
+    text-align: center;
+  }
+
+  button {
+    width: 100%;
+    margin: 10px 0;
   }
 }
