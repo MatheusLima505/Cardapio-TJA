@@ -145,6 +145,9 @@ function App() {
       } else {
         document.getElementById("revisao").innerHTML = "";
         document.getElementById("confirmar-pedido").style.display = "none";
+
+        localStorage.setItem("mensagem-pedido", "Seu pedido foi registrado!");
+        window.location.reload();
       }
     } catch (err) {
       console.error("Erro geral ao enviar o pedido:", err);
@@ -171,7 +174,23 @@ function App() {
     }
 
     fetchData();
+
+    const mensagem = localStorage.getItem("mensagem-pedido");
+
+    if (mensagem) {
+      const divMensagem = document.createElement("div");
+      divMensagem.textContent = mensagem;
+      divMensagem.className = "mensagem-sucesso";
+
+      document.body.appendChild(divMensagem);
+
+      setTimeout(() => {
+        divMensagem.remove();
+        localStorage.removeItem("mensagem-pedido");
+      }, 5000);
+    }
   }, []);
+
   //calcular valor total
   const calcularTotal = (cardapio) => {
     const novoTotal = cardapio.reduce((acc, item) => {
@@ -180,6 +199,7 @@ function App() {
 
     setTotal(novoTotal);
   };
+
   //aumentar e diminuir quantidade
   const handleIncrement = (index) => {
     const newCardapio = [...cardapio];
@@ -189,6 +209,7 @@ function App() {
       calcularTotal(newCardapio);
     }
   };
+
   const handleDecrement = (index) => {
     const newCardapio = [...cardapio];
     if (newCardapio[index].quantidade > 0) {
@@ -197,6 +218,7 @@ function App() {
       calcularTotal(newCardapio);
     }
   };
+
   //pagina
   return (
     <>
@@ -223,12 +245,6 @@ function App() {
                     fontSize: "1.05rem"
                   }}>
                   R$ {item.preco.toFixed(2)}
-                  </p>
-                  <p style={{
-                    color: 'white',
-                    fontSize: '1.05rem'
-                  }}>
-                  R$ item.preco.toFixed(2)
                   </p>
                   <p>
                     {item.estoque > 0

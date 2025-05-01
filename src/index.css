@@ -245,6 +245,31 @@ input:focus, textarea:focus, select:focus {
   }
 }
 
+.mensagem-sucesso {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  font-weight: bold;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  animation: aparecer-confirmar 0.5s ease;
+}
+
+@keyframes aparecer-confirmar {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* === Botões === */
 button {
   background-color: var(--color-secondary);
