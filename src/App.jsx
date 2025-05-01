@@ -44,10 +44,12 @@ function App() {
       container.innerHTML = "<h1>Preencha todas as informações!</h1>";
     } else {
       const dadosCliente = `
+      <div class="resumo" id="resumo-dados"> 
       <p><strong>Nome:</strong> ${nome}</p>
       <p><strong>Turma:</strong> ${turma}</p>
       <p><strong>Contato:</strong> ${contato}</p>
-      ${ (observacao !== "" && observacao !== null) ? `<p><strong>Observação</strong><br/> ${observacao} <br/></p>` : ""}
+      </div>
+      ${ (observacao !== "" && observacao !== null) ? `<div class="resumo" id="resumo-observacao"><p><strong>Observação</strong><br/> ${observacao} <br/></p></div>` : ""}
       `;
 
       let precoTotal = 0;
@@ -61,10 +63,9 @@ function App() {
 
       if (precoTotal > 0) {
         container.innerHTML =
+          `<h2>Verifique seu pedido</h2>` +
           dadosCliente +
-          `<div id="resumo-pedidos"> <h3>Resumo do pedido:</h3>` +
-          itensPedidos +
-          `</div>` +
+          `<div class="resumo" id="resumo-pedidos"> <h3>Resumo do pedido:</h3> ${itensPedidos}</div>` +
           `<br/><h4 id="valor-final">Valor total: ${formatarMoeda(precoTotal)}</h4>`;
 
         setTimeout(() => {
@@ -215,8 +216,14 @@ function App() {
                 />
                 <div style={{ width: '200px'}}>
                   <h3 style={{ marginLeft: "auto", marginRight: "auto" }}>
-                    {item.item + ` (R$ ${item.preco.toFixed(2)})`}
+                    {item.item}
                   </h3>
+                  <p style={{
+                    color: 'white',
+                    fontSize: '1.05rem'
+                  }}>
+                  R$ item.preco.toFixed(2)
+                  </p>
                   <p>
                     {item.estoque > 0
                       ? item.estoque + " Restantes"
@@ -314,7 +321,7 @@ function App() {
             <strong>Atenção!</strong> <br />A turma <strong>NÃO</strong> fará
             entregas. Os pedidos devem ser retirados na sala 05 do bloco 1 no
             primeiro intervalo (a partir das 14h30). <br />
-            Pagamentos devem ser realizados na retirada dos pedidos.
+            Os pagamentos devem ser realizados na retirada dos pedidos.
             <br />
           </h4>
         </div>

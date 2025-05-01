@@ -75,7 +75,7 @@ h4 {
   align-items: center;
   background-color: var(--color-background);
   padding: 10px 15px;
-  margin: 15px;
+  margin: 1rem;
   border-radius: var(--border-radius);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 1);
   width: 500px;
@@ -122,6 +122,7 @@ h4 {
   z-index: 1000;
 	color: var(--color-surface);
   transition: box-shadow 0.2s ease, transform 0.3s;
+  font-size: 20px;
 }
 
 #preco-total:hover {
@@ -199,6 +200,29 @@ input:focus, textarea:focus, select:focus {
   animation-name: aparecer;
   animation-duration: 1s;
   color: var(--color-text-primary);
+}
+
+.resumo {
+  width: 500px;
+  margin: auto;
+  margin-bottom: 20px;
+  border-radius: var(--border-radius);
+  background-color: var(--color-surface);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 2);
+  padding: 5px;
+}
+
+#resumo-dados {
+  /* border: solid red 1px; */
+  
+}
+
+#resumo-pedidos {
+  /* border: solid green 1px; */
+}
+
+#resumo-observacao {
+  /* border: solid yellow 1px; */
 }
 
 #valor-final {
