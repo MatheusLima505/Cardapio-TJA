@@ -219,6 +219,12 @@ function App() {
                     {item.item}
                   </h3>
                   <p style={{
+                    color: "white",
+                    fontSize: "1.05rem"
+                  }}>
+                  R$ {item.preco.toFixed(2)}
+                  </p>
+                  <p style={{
                     color: 'white',
                     fontSize: '1.05rem'
                   }}>
