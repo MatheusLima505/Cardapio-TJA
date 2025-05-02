@@ -15,12 +15,33 @@ const formatarMoeda = (valor) => {
 function App() {
   const [cardapio, setCardapio] = useState([]);
   const [total, setTotal] = useState(0);
+  const [telefone, setTelefone] = useState('');
   const popupConfirmar = document.getElementById("confirmar-pedido");
 
   window.onclick = (event) => {
     if (event.target == popupConfirmar) {
       popupConfirmar.style.display = "none";
     }
+  };
+
+  //Aplicar máscara no telefone
+  const formatarTelefone = (valor) => {
+    return valor
+      .replace(/\D/g, '')
+      .replace(/^(\d{2})(\d)/, '($1) $2')
+      .replace(/(\d{5})(\d)/, '$1-$2')
+      .slice(0, 15);
+  };
+
+  //formatar o telefone
+  const handleTelefoneChange = (e) => {
+    const formatado = formatarTelefone(e.target.value);
+    setTelefone(formatado);
+  };
+
+  const telefoneValido = () => {
+    const regex = /^\(\d{2}\) \d{5}-\d{4}$/
+    return regex.test(telefone);
   };
 
   //confirmação do pedido
@@ -42,6 +63,9 @@ function App() {
     ) {
       container.innerHTML = "<h1>Preencha todas as informações!</h1>";
     } else {
+      if (!telefoneValido) {
+        container.innerHTML = "<h1>Insira um telefone válido!</h1>"
+      }
       const dadosCliente = `
       <div class="resumo" id="resumo-dados"> 
       <p><strong>Nome:</strong> ${nome}</p>
@@ -306,8 +330,10 @@ function App() {
             type="tel"
             name="contato"
             id="contato"
+            value={telefone}
             placeholder="(99) 99999-9999"
             pattern="\(\d{2}\) \d{9}"
+            onChange={handleTelefoneChange}
             required
             autoComplete="off"
           />
