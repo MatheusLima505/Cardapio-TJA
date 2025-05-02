@@ -14,6 +14,8 @@
   --border-radius: 10px;
 }
 
+/* === Fontes === */
+
 .montserrat {
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
@@ -54,8 +56,13 @@ h4 {
   font-family: 'Montserrat', sans-serif;
 }
 
+.revisao h2 {
+  color: var(--color-secondary);
+}
+
 /* === Containers === */
-#cardapio {
+
+.cardapio {
   background-color: var(--color-surface);
   padding: 1rem;
   border-radius: 16px;
@@ -66,7 +73,7 @@ h4 {
   justify-items: center;
 }
 
-#cardapio:hover {
+.cardapio:hover {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
 }
 
@@ -78,7 +85,8 @@ h4 {
   margin: 1rem;
   border-radius: var(--border-radius);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 1);
-  width: 500px;
+  max-width: 500px;
+  width: 100%;
   text-align: center;
   transition: border-color 0.3s ease, box-shadow 0.2s ease, transform 0.3s;
   overflow: hidden;
@@ -94,8 +102,9 @@ h4 {
 .cardapio-item img {
   border: solid var(--color-primary) 3px;
   border-radius: var(--border-radius);
+  max-width: 100px;
   width: 100%;
-  height: auto;
+  height: 100px;
   object-fit: cover;
 }
 
@@ -107,6 +116,10 @@ h4 {
   color: var(--color-text-secondary);
 }
 
+.detalhes-item {
+  margin: 0 0.25rem;
+}
+
 #preco-total {
   position: fixed;
   bottom: 20px;
@@ -114,7 +127,6 @@ h4 {
   background-color: var(--color-text-primary);
   padding: 12px 20px;
   border-radius: 10px;
-  /* box-shadow: 0 0 12px rgba(100, 255, 218, 0.6); */
   box-shadow: 0 0 12px rgba(0, 0, 0, 1);
   border: solid var(--color-primary) 2px;
   font-size: 18px;
@@ -155,17 +167,18 @@ label {
   margin-bottom: 0.5rem;
 }
 
-input, textarea, select {
+input, textarea {
   background-color: var(--color-surface);
   color: var(--color-text-primary);
   border: 2px solid var(--color-surface);
   border-radius: 8px;
   padding: 0.75rem;
-  width: 100%;
+  width: 90%;
   transition: border-color 0.3s ease, box-shadow 0.2s ease;
+  resize: none;
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus, textarea:focus {
   border-color: var(--color-secondary);
   box-shadow: 0 0 8px var(--color-secondary);
   outline: none;
@@ -203,7 +216,8 @@ input:focus, textarea:focus, select:focus {
 }
 
 .resumo {
-  width: 500px;
+  max-width: 500px;
+  width: 100%;
   margin: auto;
   margin-bottom: 20px;
   border-radius: var(--border-radius);
@@ -243,10 +257,10 @@ input:focus, textarea:focus, select:focus {
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   z-index: 9999;
-  animation: aparecer-confirmar 0.5s ease;
+  animation: aparecer-confirmacao 0.5s ease;
 }
 
-@keyframes aparecer-confirmar {
+@keyframes aparecer-confirmacao {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -276,27 +290,39 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* === Alertas === */
-.alert {
-  background-color: var(--color-error);
-  color: var(--color-text-primary);
-  padding: 1rem;
-  border-radius: 10px;
-  margin: 1rem 0;
-  font-weight: bold;
-}
-
 /* Responsividade */
-@media (max-width: 768px) {
-  body {
-    padding: 10px;
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .dados {
+    grid-template-columns: auto 1fr;
+    padding: 0.5rem;
   }
 
   .cardapio-item {
-    width: 100%;
+    width: 98%;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
   }
 
-  h1 {
-    font-size: 2rem;
+  .resumo, #valor-final, #revisao {
+    width: 80%;
+    padding: 1rem;
+  }
+
+  #preco-total {
+    bottom: 10px;
+    right: 10px;
+    font-size: 16px;
+    padding: 10px 16px;
+  }
+
+  button {
+    margin: 5px 0;
+    width: 50%;
   }
 }

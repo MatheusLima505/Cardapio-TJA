@@ -31,7 +31,6 @@ function App() {
     const observacao = document.getElementById("observacao").value;
 
     const container = document.getElementById("revisao");
-    document.getElementById("confirmar-pedido").style.display = "block";
 
     if (
       nome === null ||
@@ -110,7 +109,7 @@ function App() {
           alert(
             "Você já fez um pedido recentemente. Tente novamente em 5 minutos."
           );
-          return;
+          // return;
         }
       }
 
@@ -224,26 +223,16 @@ function App() {
     <>
       <h1>Cardápio da TJA</h1>
       <div className="form">
-        <div id="cardapio">
+        <div className="cardapio">
           {cardapio.length > 0 ? (
             cardapio.map((item, index) => (
               <div key={index} className="cardapio-item">
-                <img
-                  src={item.imagem}
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    marginRight: "16px",
-                  }}
-                />
-                <div style={{ width: '200px'}}>
+                <img src={item.imagem} />
+                <div className="detalhes-item" style={{ width: '200px'}}>
                   <h3 style={{ marginLeft: "auto", marginRight: "auto" }}>
                     {item.item}
                   </h3>
-                  <p style={{
-                    color: "white",
-                    fontSize: "1.05rem"
-                  }}>
+                  <p style={{ color: "white", fontSize: "1.05rem" }}>
                   R$ {item.preco.toFixed(2)}
                   </p>
                   <p>
@@ -252,7 +241,6 @@ function App() {
                       : "Esgotado"}
                   </p>
                 </div>
-
                 <div
                   style={{
                     display: "flex",
@@ -331,7 +319,6 @@ function App() {
           rows="10"
           cols="50"
           placeholder="(Opcional) Detalhes adicionais do pedido"
-          style={{ resize: "none" }}
         ></textarea>
         <div id="confirmar-pedido">
           <div id="revisao"></div>
