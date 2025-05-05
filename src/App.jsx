@@ -15,7 +15,7 @@ const formatarMoeda = (valor) => {
 function App() {
   const [cardapio, setCardapio] = useState([]);
   const [total, setTotal] = useState(0);
-  const [telefone, setTelefone] = useState('');
+  const [telefone, setTelefone] = useState("");
   const popupConfirmar = document.getElementById("confirmar-pedido");
 
   window.onclick = (event) => {
@@ -24,12 +24,37 @@ function App() {
     }
   };
 
+  // Atualizar estoque no banco de dados
+  const attEstoque = async (itensAtualizados) => {
+    try {
+      const atualizacoes = itensAtualizados.map((item) =>
+        supabase
+          .from("Estoque")
+          .update({ estoque: item.estoque })
+          .eq("id", item.id)
+      );
+
+      const resultados = await Promisse.all(atualizacoes);
+
+      resultados.forEach(({ error }, i) => {
+        if (error) {
+          console.error(
+            `Erro ao atualizar item ID ${itensAtualizados[i].id}:`,
+            error
+          );
+        }
+      });
+    } catch (err) {
+      console.error("Erro geral ao atualizar estoque:", err);
+    }
+  };
+
   //Aplicar máscara no telefone
   const formatarTelefone = (valor) => {
     return valor
-      .replace(/\D/g, '')
-      .replace(/^(\d{2})(\d)/, '($1) $2')
-      .replace(/(\d{5})(\d)/, '$1-$2')
+      .replace(/\D/g, "")
+      .replace(/^(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{5})(\d)/, "$1-$2")
       .slice(0, 15);
   };
 
@@ -40,7 +65,7 @@ function App() {
   };
 
   const telefoneValido = () => {
-    const regex = /^\(\d{2}\) \d{5}-\d{4}$/
+    const regex = /^\(\d{2}\) \d{5}-\d{4}$/;
     return regex.test(telefone);
   };
 
@@ -64,7 +89,7 @@ function App() {
       container.innerHTML = "<h1>Preencha todas as informações!</h1>";
     } else {
       if (!telefoneValido) {
-        container.innerHTML = "<h1>Insira um telefone válido!</h1>"
+        container.innerHTML = "<h1>Insira um telefone válido!</h1>";
       }
       const dadosCliente = `
       <div class="resumo" id="resumo-dados"> 
@@ -72,7 +97,11 @@ function App() {
       <p><strong>Turma:</strong> ${turma}</p>
       <p><strong>Contato:</strong> ${contato}</p>
       </div>
-      ${ (observacao !== "" && observacao !== null) ? `<div class="resumo" id="resumo-observacao"><p><strong>Observação</strong><br/> ${observacao} <br/></p></div>` : ""}
+      ${
+        observacao !== "" && observacao !== null
+          ? `<div class="resumo" id="resumo-observacao"><p><strong>Observação</strong><br/> ${observacao} <br/></p></div>`
+          : ""
+      }
       `;
 
       let precoTotal = 0;
@@ -89,7 +118,9 @@ function App() {
           `<h2>Verifique seu pedido</h2>` +
           dadosCliente +
           `<div class="resumo" id="resumo-pedidos"> <h3>Resumo do pedido:</h3> ${itensPedidos}</div>` +
-          `<br/><h4 id="valor-final">Valor total: ${formatarMoeda(precoTotal)}</h4>`;
+          `<br/><h4 id="valor-final">Valor total: ${formatarMoeda(
+            precoTotal
+          )}</h4>`;
 
         setTimeout(() => {
           const botao = document.createElement("button");
@@ -133,7 +164,7 @@ function App() {
           alert(
             "Você já fez um pedido recentemente. Tente novamente em 5 minutos."
           );
-          // return;
+          return;
         }
       }
 
@@ -151,6 +182,13 @@ function App() {
           preco: item.preco,
         }));
 
+      const ids = cardapio
+        .filter((item) => item.quantidade > 0)
+        .map((item) => ({
+          id: item.id,
+          estoque: item.estoque - item.quantidade,
+        }));
+
       const pedido = {
         cliente,
         turma,
@@ -166,6 +204,9 @@ function App() {
       if (error) {
         console.error("Erro ao enviar o pedido:", error);
       } else {
+
+        await attEstoque(ids);
+
         document.getElementById("revisao").innerHTML = "";
         document.getElementById("confirmar-pedido").style.display = "none";
 
@@ -252,12 +293,12 @@ function App() {
             cardapio.map((item, index) => (
               <div key={index} className="cardapio-item">
                 <img src={item.imagem} />
-                <div className="detalhes-item" style={{ width: '200px'}}>
+                <div className="detalhes-item" style={{ width: "200px" }}>
                   <h3 style={{ marginLeft: "auto", marginRight: "auto" }}>
                     {item.item}
                   </h3>
                   <p style={{ color: "white", fontSize: "1.05rem" }}>
-                  R$ {item.preco.toFixed(2)}
+                    R$ {item.preco.toFixed(2)}
                   </p>
                   <p>
                     {item.estoque > 0
@@ -338,7 +379,10 @@ function App() {
             autoComplete="off"
           />
         </div>
-        <label htmlFor="observacao" id="label-observacao">Observações adicionais: </label> <br />
+        <label htmlFor="observacao" id="label-observacao">
+          Observações adicionais:{" "}
+        </label>{" "}
+        <br />
         <textarea
           name="observacao"
           id="observacao"
