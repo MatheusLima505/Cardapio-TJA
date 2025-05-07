@@ -34,7 +34,7 @@ function App() {
           .eq("id", item.id)
       );
 
-      const resultados = await Promisse.all(atualizacoes);
+      const resultados = await Promise.all(atualizacoes);
 
       resultados.forEach(({ error }, i) => {
         if (error) {
