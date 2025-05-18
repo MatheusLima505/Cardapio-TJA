@@ -16,6 +16,8 @@ function App() {
   const [cardapio, setCardapio] = useState([]);
   const [total, setTotal] = useState(0);
   const [telefone, setTelefone] = useState("");
+  const [clickTrackers, setClickTrackers] = useState({});
+  const [rotatedItems, setRotatedItems] = useState({});
   const popupConfirmar = document.getElementById("confirmar-pedido");
 
   window.onclick = (event) => {
@@ -204,7 +206,6 @@ function App() {
       if (error) {
         console.error("Erro ao enviar o pedido:", error);
       } else {
-
         await attEstoque(ids);
 
         document.getElementById("revisao").innerHTML = "";
@@ -283,6 +284,35 @@ function App() {
     }
   };
 
+  const handleImageClick = (index) => {
+    setClickTrackers((prev) => {
+      const now = Date.now();
+      const tracker = prev[index] || { count: 0, lastClick: now };
+
+      const timeDiff = now - tracker.lastClick;
+
+      if (timeDiff > 1000) {
+        return { ...prev, [index]: { count: 1, lastClick: now } };
+      }
+
+      const newCount = tracker.count + 1;
+
+      if (newCount >= 3) {
+        setRotatedItems((prevRotated) => ({
+          ...prevRotated,
+          [index]: !prevRotated[index],
+        }));
+
+        return { ...prev, [index]: { count: 0, lastClick: now } };
+      }
+
+      return {
+        ...prev,
+        [index]: { count: newCount, lastClick: now },
+      };
+    });
+  };
+
   //pagina
   return (
     <>
@@ -290,57 +320,63 @@ function App() {
       <div className="form">
         <div className="cardapio">
           {cardapio.length > 0 ? (
-            cardapio.map((item, index) => (
-              <div key={index} className="cardapio-item">
-                <img src={item.imagem} />
-                <div className="detalhes-item" style={{ width: "200px" }}>
-                  <h3 style={{ marginLeft: "auto", marginRight: "auto" }}>
-                    {item.item}
-                  </h3>
-                  <p style={{ color: "white", fontSize: "1.05rem" }}>
-                    R$ {item.preco.toFixed(2)}
-                  </p>
-                  <p>
-                    {item.estoque > 0
-                      ? item.estoque + " Restantes"
-                      : "Esgotado"}
-                  </p>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginLeft: "auto",
-                    width: "fit-content",
-                  }}
-                >
-                  <span style={{ marginBottom: "8px" }}>Encomendar</span>
+            cardapio
+              .filter((item) => item.estoque > 0)
+              .map((item, index) => (
+                <div key={index} className="cardapio-item">
+                  <img
+                    onClick={() => handleImageClick(index)}
+                    className={rotatedItems[index] ? "rotated" : ""}
+                    src={
+                      rotatedItems[index]
+                        ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlOVPOFvPb5zuHi8lEc_D0-il0GYmnlYN8Dg&s"
+                        : item.imagem
+                    }
+                  />
+                  <div className="detalhes-item" style={{ width: "200px" }}>
+                    <h3 style={{ marginLeft: "auto", marginRight: "auto" }}>
+                      {item.item}
+                    </h3>
+                    <p style={{ color: "white", fontSize: "1.05rem" }}>
+                      R$ {item.preco.toFixed(2)}
+                    </p>
+                    <p>{item.estoque + " Restantes"}</p>
+                  </div>
                   <div
                     style={{
                       display: "flex",
-                      gap: "8px",
+                      flexDirection: "column",
                       alignItems: "center",
+                      justifyContent: "center",
+                      marginLeft: "auto",
+                      width: "fit-content",
                     }}
                   >
-                    <button
-                      type="button"
-                      onClick={() => handleDecrement(index)}
+                    <span style={{ marginBottom: "8px" }}>Encomendar</span>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "8px",
+                        alignItems: "center",
+                      }}
                     >
-                      -
-                    </button>
-                    <span>{item.quantidade || 0}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleIncrement(index)}
-                    >
-                      +
-                    </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDecrement(index)}
+                      >
+                        -
+                      </button>
+                      <span>{item.quantidade || 0}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleIncrement(index)}
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+              ))
           ) : (
             <p>Ainda não há itens no cardápio.</p>
           )}
