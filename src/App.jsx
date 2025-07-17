@@ -227,11 +227,12 @@ function App() {
         if (error) {
           console.error("Erro ao buscar dados:", error.message);
         } else {
-          console.log("Dados recebidos:", data);
+          
           if (data && data.length === 0) {
             console.log('Nenhum dado encontrado na tabela "Estoque".');
           }
-          setCardapio(data);
+          setCardapio(data.filter((item) => item.estoque > 0));
+          console.log("Dados recebidos:", data);
         }
       } catch (err) {
         console.error("Erro na requisição:", err);
@@ -272,6 +273,7 @@ function App() {
       newCardapio[index].quantidade = (newCardapio[index].quantidade || 0) + 1;
       setCardapio(newCardapio);
       calcularTotal(newCardapio);
+
     }
   };
 
@@ -312,6 +314,10 @@ function App() {
       };
     });
   };
+
+  useEffect(() => {
+    console.log(cardapio)
+  }, [cardapio])
 
   //pagina
   return (
